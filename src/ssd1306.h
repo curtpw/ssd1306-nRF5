@@ -34,7 +34,6 @@
 #include "ssd1306_fonts.h"
 #include "i2c/ssd1306_i2c_conf.h"
 #include "spi/ssd1306_spi_conf.h"
-#include "lcd/lcd_common.h"
 #include "lcd/oled_ssd1306.h"
 #include "lcd/oled_ssd1331.h"
 #include "lcd/oled_ssd1351.h"
@@ -137,16 +136,16 @@ uint8_t      ssd1306_displayWidth(void);
 ///////////////////////////////////////////////////////////////////////
 
 /**
- * @defgroup LCD_DIRECT_DRAW_SSD1306_COMPAT LCD direct draw functions, compatible with ssd1306 oled types.
+ * @defgroup LCD_GRAPHICS_GENERIC_API LCD direct graphics functions for all display types
  * @{
- * @brief LCD direct draw functions for all display types: color and monochrome.
+ * @brief LCD direct graphics functions for all display types: color and monochrome.
  *
- * @details LCD direct draw functions are applicable for all display types. These functions will work
+ * @details LCD Direct graphics functions applicable for all display types. These functions will work
  *        both for monochrome and 8-bit/16-bit color OLED displays. You need remember, that for RGB
- *        oled displays these functions work only in special ssd1306 compatible mode. If you're going to
- *        combine NanoEngine capabilities with these functions, don't forget to switch addressing
- *        mode via ssd1306_setMode().
- *        Direct draw functions draw directly in GDRAM and do not use any double-buffering.
+ *        oled displays these functions work only in vertical addressing mode. If you're going to
+ *        combine NanoEngine capabilities with these fucntions, don't forget to switch addressing
+ *        mode via ssd1331_setMode(), ssd1351_setMode() and etc. This function draws directly in GDRAM
+ *        and do not use any pre-buffering.
  */
 
 /**
@@ -207,7 +206,6 @@ uint8_t     ssd1306_printFixed(uint8_t xpos, uint8_t y, const char *ch, EFontSty
  * @warning Be careful with you flash space! Do not mix too many different functions in single sketch.
  *          ssd1306_printFixedN() uses much flash: ~474 bytes, ssd1306_printFixed() needs 388 bytes.
  *          Placing both of these functions to your sketch will consume almost 1KiB.
- * @deprecated Use ssd1306_printFixedN() instead.
  */
 uint8_t     ssd1306_printFixed2x(uint8_t xpos, uint8_t y, const char ch[], EFontStyle style) __attribute__ ((deprecated));
 
@@ -233,31 +231,12 @@ uint8_t     ssd1306_printFixed2x(uint8_t xpos, uint8_t y, const char ch[], EFont
 uint8_t     ssd1306_printFixedN(uint8_t xpos, uint8_t y, const char ch[], EFontStyle style, uint8_t factor);
 
 /**
- * @brief Prints single character to display at current cursor position
- *
- * Prints single character to display at current cursor position
- * @param ch - character to print to the display. 'LF' and 'CR' are skipped
- * @return returns number of printed characters.
- */
-size_t      ssd1306_write(uint8_t ch);
-
-/**
- * @brief Prints null-terminated string to display at current cursor position
- *
- * Prints null-terminated string to display at current cursor position
- * @param ch - string to print to the display. 'LF' and 'CR' are skipped
- * @return returns number of printed characters.
- */
-size_t      ssd1306_print(const char ch[]);
-
-/**
  * Prints text to screen using font 6x8.
  * @param x - horizontal position in pixels
  * @param y - vertical position in blocks (pixels/8)
  * @param ch - NULL-terminated string to print
  * @param style - font style (EFontStyle), normal by default.
  * @returns number of chars in string
- * @deprecated Use ssd1306_printFixed() instead.
  */
 uint8_t      ssd1306_charF6x8(uint8_t x, uint8_t y,
                               const char ch[],
@@ -274,7 +253,6 @@ uint8_t      ssd1306_charF6x8(uint8_t x, uint8_t y,
  * @param ch - NULL-terminated string to print
  * @param style - font style (EFontStyle).
  * @returns number of chars in string
- * @deprecated Use ssd1306_drawFixedN() instead.
  */
 uint8_t      ssd1306_charF12x16(uint8_t xpos,
                                 uint8_t y,
@@ -293,7 +271,6 @@ uint8_t      ssd1306_charF12x16(uint8_t xpos,
  * @param style - font style (EFontStyle), normal by default.
  * @param right - right boundary of the text to output
  * @returns number of chars in string
- * @deprecated This function is removed as superflouse.
  */
 uint8_t      ssd1306_charF6x8_eol(uint8_t left,
                                   uint8_t y,
@@ -330,7 +307,6 @@ void         ssd1306_setFixedFont(const uint8_t * progmemFont);
  * this function you can implement your own fonts.
  * First font char must be started with \<space\> image.
  * @param progmemFont - font to setup located in Flash area
- * @deprecated Use ssd1306_setFixedFont() instead.
  */
 void         ssd1306_setFont6x8(const uint8_t * progmemFont) __attribute__ ((deprecated));
 

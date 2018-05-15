@@ -28,7 +28,7 @@
 #include "intf/ssd1306_interface.h"
 #include "i2c/ssd1306_i2c.h"
 #include "spi/ssd1306_spi.h"
-#include "ssd1306_hal/io.h"
+#include "hal/io.h"
 
 
 static const uint8_t PROGMEM s_oled128x64_initData[] =
@@ -53,7 +53,7 @@ static const uint8_t PROGMEM s_oled128x64_initData[] =
 static uint8_t s_column;
 static uint8_t s_page;
 
-static void sh1106_setBlock(lcduint_t x, lcduint_t y, lcduint_t w)
+static void sh1106_setBlock(uint8_t x, uint8_t y, uint8_t w)
 {
     s_column = x;
     s_page = y;
@@ -83,20 +83,15 @@ static void sh1106_nextPage(void)
     sh1106_setBlock(s_column,s_page+1,0);
 }
 
-static void sh1106_setMode(lcd_mode_t mode)
-{
-}
-
 void    sh1106_128x64_init()
 {
-    ssd1306_lcd.type = LCD_TYPE_SH1106;
-    ssd1306_lcd.height = 64;
-    ssd1306_lcd.width = 132;
-    ssd1306_lcd.set_block = sh1106_setBlock;
-    ssd1306_lcd.next_page = sh1106_nextPage;
-    ssd1306_lcd.send_pixels1 = ssd1306_intf.send;
-    ssd1306_lcd.send_pixels_buffer1 = ssd1306_intf.send_buffer;
-    ssd1306_lcd.set_mode = sh1106_setMode;
+    g_lcd_type = LCD_TYPE_SH1106;
+    s_displayHeight = 64;
+    s_displayWidth = 128;
+    ssd1306_setRamBlock = sh1106_setBlock;
+    ssd1306_nextRamPage = sh1106_nextPage;
+    ssd1306_sendPixels = ssd1306_intf.send;
+    ssd1306_sendPixelsBuffer = ssd1306_intf.send_buffer;
     for( uint8_t i=0; i<sizeof(s_oled128x64_initData); i++)
     {
         ssd1306_sendCommand(pgm_read_byte(&s_oled128x64_initData[i]));

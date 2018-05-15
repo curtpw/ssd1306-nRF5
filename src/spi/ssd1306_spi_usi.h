@@ -30,7 +30,7 @@
 #define _SSD1306_SPI_USI_H_
 
 #include "ssd1306_spi_conf.h"
-#include "ssd1306_hal/io.h"
+#include "hal/io.h"
 
 #ifdef __cplusplus
 extern "C" {

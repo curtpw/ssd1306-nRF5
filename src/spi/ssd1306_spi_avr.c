@@ -27,7 +27,7 @@
 
 #include "intf/ssd1306_interface.h"
 #include "lcd/lcd_common.h"
-#include "ssd1306_hal/io.h"
+#include "hal/io.h"
 
 #ifdef SSD1306_AVR_SPI_SUPPORTED
 
@@ -110,7 +110,7 @@ static void ssd1306_spiSendBytes_avr(const uint8_t * buffer, uint16_t size)
 
 static void ssd1306_spiStop_avr()
 {
-    if (ssd1306_lcd.type == LCD_TYPE_PCD8544)
+    if (g_lcd_type == LCD_TYPE_PCD8544)
     {
         digitalWrite(s_ssd1306_dc, LOW);
         ssd1306_spiSendByte_avr( 0x00 ); // Send NOP command to allow last data byte to pass (bug in PCD8544?)

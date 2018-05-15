@@ -34,7 +34,6 @@
 
 /**
  * NanoCanvas represents objects for drawing in memory buffer
- * @deprecated Use NanoCanvas1, NanoCanvas8, NanoCanvas16 instead
  */
 class NanoCanvas
 {
@@ -64,7 +63,6 @@ public:
      * Draws pixel on specified position
      * @param x - position X
      * @param y - position Y
-     * @deprecated Use putPixel() instead.
      */
     inline void drawPixel(uint8_t x, uint8_t y) __attribute__ ((deprecated)) { putPixel(x,y); };
 
@@ -121,7 +119,6 @@ public:
      * @param y - start position Y
      * @param ch - text to print (null-terminated)
      * @param style - font style (EFontStyle), normal by default
-     * @deprecated use printFixed() instead.
      */
     inline void char_f6x8(uint8_t x, uint8_t y, const char ch[], EFontStyle style = STYLE_NORMAL)
     __attribute__ ((deprecated))
@@ -133,7 +130,6 @@ public:
      * @param y - start position Y
      * @param ch - text to print (null-terminated)
      * @param style - font style (EFontStyle), normal by default
-     * @deprecated use printFixed() instead.
      */
     void charF6x8(uint8_t x, uint8_t y, const char ch[], EFontStyle style = STYLE_NORMAL);
 

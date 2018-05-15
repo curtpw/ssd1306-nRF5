@@ -82,7 +82,10 @@ public:
      */
     static void refresh()
     {
-        memset(m_refreshFlags,0xFF,sizeof(uint16_t) * NanoEngineTiler<C,W,H,B>::NE_MAX_TILES_NUM);
+        for(uint8_t i=0; i<NanoEngineTiler<C,W,H,B>::NE_MAX_TILES_NUM; i++)
+        {
+            m_refreshFlags[i] = ~(0);
+        }
     }
 
     /**
@@ -110,13 +113,11 @@ public:
      */
     static void refresh(lcdint_t x1, lcdint_t y1, lcdint_t x2, lcdint_t y2)
     {
-        if (y1 < 0) y1 = 0;
-        if (x1 < 0) x1 = 0;
-        y1 = y1>>B;
+        y1 = max(0,y1>>B);
         y2 = min((y2>>B), NE_MAX_TILES_NUM - 1);
-        for (uint8_t y=y1; y<=y2; y++)
+        for(uint8_t y=y1; y<=y2; y++)
         {
-            for(uint8_t x=x1>>B; x<=(x2>>B); x++)
+            for(uint8_t x=max(0,(x1>>B)); x<=(x2>>B); x++)
             {
                 m_refreshFlags[y] |= (1<<x);
             }
@@ -191,11 +192,11 @@ void NanoEngineTiler<C,W,H,B>::displayBuffer()
         canvas.blt();
         return;
     }
-    for (uint8_t y = 0; y < ssd1306_lcd.height; y = y + NE_TILE_HEIGHT)
+    for (uint8_t y = 0; y < s_displayHeight; y = y + NE_TILE_HEIGHT)
     {
         uint16_t flag = m_refreshFlags[y >> NE_TILE_SIZE_BITS];
         m_refreshFlags[y >> NE_TILE_SIZE_BITS] = 0;
-        for (uint8_t x = 0; x < ssd1306_lcd.width; x = x + NE_TILE_WIDTH)
+        for (uint8_t x = 0; x < s_displayWidth; x = x + NE_TILE_WIDTH)
         {
             if (flag & 0x01)
             {
@@ -210,15 +211,15 @@ void NanoEngineTiler<C,W,H,B>::displayBuffer()
 template<class C, uint8_t W, uint8_t H, uint8_t B>
 void NanoEngineTiler<C,W,H,B>::displayPopup(const char *msg)
 {
-    NanoRect rect = { 8, (ssd1306_lcd.height>>1) - 8, ssd1306_lcd.width - 8, (ssd1306_lcd.height>>1) + 8 };
+    NanoRect rect = { 8, (s_displayHeight>>1) - 8, s_displayWidth - 8, (s_displayHeight>>1) + 8 };
     // TODO: It would be nice to calculate message height
-    NanoPoint textPos = { (ssd1306_lcd.width - (lcdint_t)strlen(msg)*s_fixedFont.width) >> 1, (ssd1306_lcd.height>>1) - 4 };
+    NanoPoint textPos = { (s_displayWidth - (lcdint_t)strlen(msg)*s_fixedFont.width) >> 1, (s_displayHeight>>1) - 4 };
     refresh(rect);
-    for (uint8_t y = 0; y < ssd1306_lcd.height; y = y + NE_TILE_HEIGHT)
+    for (uint8_t y = 0; y < s_displayHeight; y = y + NE_TILE_HEIGHT)
     {
         uint16_t flag = m_refreshFlags[y >> NE_TILE_SIZE_BITS];
         m_refreshFlags[y >> NE_TILE_SIZE_BITS] = 0;
-        for (uint8_t x = 0; x < ssd1306_lcd.width; x = x + NE_TILE_WIDTH)
+        for (uint8_t x = 0; x < s_displayWidth; x = x + NE_TILE_WIDTH)
         {
             if (flag & 0x01)
             {

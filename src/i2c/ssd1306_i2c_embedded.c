@@ -28,7 +28,7 @@
 #include "ssd1306_i2c_conf.h"
 #include "ssd1306_i2c.h"
 
-#include "ssd1306_hal/io.h"
+#include "hal/io.h"
 
 #ifdef SSD1306_I2C_SW_SUPPORTED
 

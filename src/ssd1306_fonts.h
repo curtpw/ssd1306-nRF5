@@ -28,7 +28,7 @@
 #ifndef SSD1306_FONTS_H
 #define SSD1306_FONTS_H
 
-#include "ssd1306_hal/io.h"
+#include "hal/io.h"
 
 /**
  * @defgroup LCD_FONTS Supported LCD fonts
@@ -56,8 +56,8 @@ extern const PROGMEM uint8_t courier_new_font11x16_digits [];
 /**
  * Comic Sans ASCII font 24x32 with digits only (Ascii codes 32 - 64).
  * @warning can be used only with ssd1306_printFixed() and ssd1306_setFixedFont() functions.
- */ 
-extern const PROGMEM uint8_t comic_sans_font24x32_123 [];
+ */
+extern const uint8_t comic_sans_font24x32_123[] PROGMEM;
 
 /**
  * @}

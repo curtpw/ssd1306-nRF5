@@ -29,8 +29,7 @@
 #ifndef _OLED_SSD1351_H_
 #define _OLED_SSD1351_H_
 
-#include "ssd1306_hal/io.h"
-#include "lcd/lcd_common.h"
+#include "hal/io.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -51,10 +50,9 @@ extern "C" {
  * So, if you're going to use NanoCanvas8 functions, please call
  * ssd1351_setMode(0) prior to using pure RGB methods.
  *
- * @param mode 0 or 1
- * @deprecated Use ssd1306_setMode() instead.
+ * @param vertical - 0 or 1
  */
-void        ssd1351_setMode(lcd_mode_t mode);
+void        ssd1351_setMode(uint8_t vertical);
 
 /**
  * @brief Inits 128x128 RGB OLED display (based on SSD1351 controller).

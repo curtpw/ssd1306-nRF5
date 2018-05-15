@@ -29,7 +29,7 @@
 #ifndef _SSD1306_INTERFACE_H_
 #define _SSD1306_INTERFACE_H_
 
-#include "ssd1306_hal/io.h"
+#include "hal/io.h"
 
 #ifdef __cplusplus
 extern "C" {

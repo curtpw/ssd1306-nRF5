@@ -21,54 +21,37 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 */
-/**
- * @file tiny_buffer.h Drawing in memory buffer
- */
 
+#include "tiny_ssd1306.h"
 
-#ifndef _TINY_BUFFER_H_
-#define _TINY_BUFFER_H_
+/* Font width in pixels */
+static const uint8_t FIXED_FONT_WIDTH = 6;
+/* Font height in blocks */
+static const uint8_t FIXED_FONT_HEIGHT = 1;
 
-#include "nano_gfx.h"
-
-/**
- * TinyBuffer represents object to work with double buffered display.
- * Easy to use:
- * TinyBuffer  lcd( SSD1306_128x64 );
- * void setup()
- * {
- *      lcd.beginI2C();
- *
- *      lcd.clear();
- *      lcd.charF6x8(0,0,"Hello");
- * }
- *
- */
-class TinyBuffer: public NanoCanvas
+size_t TinySSD1306::write(uint8_t ch)
 {
-public:
-    /**
-     * Creates new buffer object.
-     * Width can be of any value.
-     * Height should be divided by 8.
-     * Memory buffer must be not less than w * h / 8.
-     *
-     * @param w - width
-     * @param h - height
-     * @param bytes - pointer to memory buffer to use
-     */
-    TinyBuffer(uint8_t w, uint8_t h, uint8_t *bytes): NanoCanvas( w, h, bytes ) {};
+    const char str[2] = { static_cast<char>(ch), '\0' };
+    if (ch == '\r')
+    {
+        m_xpos = 0;
+    }
+    if ( (m_xpos > width() - FIXED_FONT_WIDTH) || (ch == '\n') )
+    {
+        m_xpos = 0;
+        m_ypos += FIXED_FONT_HEIGHT;
+    }
+    if ( m_ypos > (height() >> 3) - FIXED_FONT_HEIGHT )
+    {
+        m_ypos = 0;
+    }
+    ssd1306_printFixed( m_xpos, m_ypos, str, STYLE_NORMAL );
+    m_xpos += FIXED_FONT_WIDTH;
+}
 
-    /**
-     * Writes single character to the display
-     * @param ch - character to write
-     */
-//    virtual size_t write(uint8_t ch);
-private:
-    uint8_t      m_xpos = 0;
-
-    uint8_t      m_ypos = 0;
+void TinySSD1306::clear()
+{
+    m_xpos = 0;
+    m_ypos = 0;
+    ssd1306_clearScreen();
 };
-
-#endif
-

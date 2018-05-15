@@ -1,7 +1,7 @@
 /*
     MIT License
 
-    Copyright (c) 2017-2018, Alexey Dynda
+    Copyright (c) 2018, Alexey Dynda
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -21,54 +21,19 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 */
-/**
- * @file tiny_buffer.h Drawing in memory buffer
- */
-
-
-#ifndef _TINY_BUFFER_H_
-#define _TINY_BUFFER_H_
-
-#include "nano_gfx.h"
 
 /**
- * TinyBuffer represents object to work with double buffered display.
- * Easy to use:
- * TinyBuffer  lcd( SSD1306_128x64 );
- * void setup()
- * {
- *      lcd.beginI2C();
- *
- *      lcd.clear();
- *      lcd.charF6x8(0,0,"Hello");
- * }
- *
+ * @file hal/esp/io.h SSD1306 ESP IO communication functions
  */
-class TinyBuffer: public NanoCanvas
-{
-public:
-    /**
-     * Creates new buffer object.
-     * Width can be of any value.
-     * Height should be divided by 8.
-     * Memory buffer must be not less than w * h / 8.
-     *
-     * @param w - width
-     * @param h - height
-     * @param bytes - pointer to memory buffer to use
-     */
-    TinyBuffer(uint8_t w, uint8_t h, uint8_t *bytes): NanoCanvas( w, h, bytes ) {};
 
-    /**
-     * Writes single character to the display
-     * @param ch - character to write
-     */
-//    virtual size_t write(uint8_t ch);
-private:
-    uint8_t      m_xpos = 0;
+#ifndef _SSD1306_ESP_IO_H_
+#define _SSD1306_ESP_IO_H_
 
-    uint8_t      m_ypos = 0;
-};
+#if defined(__XTENSA__) && !defined(ARDUINO)
+
+// TODO: To add support. Any help is welcome
+
+#endif
 
 #endif
 

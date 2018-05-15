@@ -24,57 +24,17 @@
 
 #include "lcd/lcd_common.h"
 #include "intf/ssd1306_interface.h"
-#include "spi/ssd1306_spi.h"
 #include <stddef.h>
 
-#define CMD_ARG 0xFF
-
-ssd1306_lcd_t ssd1306_lcd = { 0 };
+void  (*ssd1306_setRamBlock)(uint8_t x, uint8_t y, uint8_t w) = NULL;
+void  (*ssd1306_nextRamPage)(void) = NULL;
+void  (*ssd1306_sendPixels)(uint8_t data) = NULL;
+void  (*ssd1306_sendPixelsBuffer)(const uint8_t *buffer, uint16_t len) = NULL;
+void  (*ssd1306_sendPixel8)(uint8_t data) = NULL;
 
 void ssd1306_sendData(uint8_t data)
 {
     ssd1306_dataStart();
-    ssd1306_lcd.send_pixels1( data );
+    ssd1306_sendPixels( data );
     ssd1306_intf.stop();
-}
-
-void ssd1306_configureI2cDisplay(const uint8_t *config, uint8_t configSize)
-{
-    ssd1306_commandStart();
-    for( uint8_t i=0; i<configSize; i++)
-    {
-        uint8_t data = pgm_read_byte(&config[i]);
-        ssd1306_intf.send(data);
-    }
-    ssd1306_intf.stop();
-}
-
-void ssd1306_configureSpiDisplay(const uint8_t *config, uint8_t configSize)
-{
-    ssd1306_intf.start();
-    ssd1306_spiDataMode(0);
-    for( uint8_t i=0; i<configSize; i++)
-    {
-        uint8_t data = pgm_read_byte(&config[i]);
-        if (data == CMD_ARG)
-        {
-            data = pgm_read_byte(&config[++i]);
-            ssd1306_spiDataMode(1);
-            ssd1306_intf.send(data);
-            ssd1306_spiDataMode(0);
-        }
-        else
-        {
-            ssd1306_intf.send(data);
-        }
-    }
-    ssd1306_intf.stop();
-}
-
-void ssd1306_setMode(lcd_mode_t mode)
-{
-    if (ssd1306_lcd.set_mode)
-    {
-        ssd1306_lcd.set_mode( mode );
-    }
 }

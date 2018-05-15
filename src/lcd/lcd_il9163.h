@@ -29,8 +29,7 @@
 #ifndef _TFT_IL9163_H_
 #define _TFT_IL9163_H_
 
-#include "ssd1306_hal/io.h"
-#include "lcd/lcd_common.h"
+#include "hal/io.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -51,10 +50,9 @@ extern "C" {
  * So, if you're going to use NanoCanvas8 functions, please call
  * il9163_setMode(0) prior to using pure RGB methods.
  *
- * @param mode 0 or 1
- * @deprecated Use ssd1306_setMode() instead.
+ * @param mode - 0 or 1
  */
-void        il9163_setMode(lcd_mode_t mode);
+void        il9163_setMode(uint8_t mode);
 
 /**
  * @brief Inits 128x128 RGB OLED display (based on il9163 controller).
@@ -67,16 +65,6 @@ void        il9163_setMode(lcd_mode_t mode);
 void         il9163_128x128_init(void);
 
 /**
- * @brief Inits 128x160 RGB OLED display (based on st7735 controller).
- *
- * Inits 128x160 RGB OLED display (based on st7735 controller).
- * User must init communication interface (i2c, spi) prior to calling this function.
- * @see ssd1306_i2cInit()
- * @see ssd1306_spiInit()
- */
-void         st7735_128x160_init(void);
-
-/**
  * @brief Inits 128x128 RGB TFT display over spi (based on il9163 controller).
  *
  * Inits 128x128 RGB TFT display over spi (based on il9163 controller)
@@ -85,16 +73,6 @@ void         st7735_128x160_init(void);
  * @param dcPin - data/command pin to control LCD dc (required)
  */
 void         il9163_128x128_spi_init(int8_t rstPin, int8_t cesPin, int8_t dcPin);
-
-/**
- * @brief Inits 128x160 RGB TFT display over spi (based on st7735 controller).
- *
- * Inits 128x160 RGB TFT display over spi (based on st7735 controller)
- * @param rstPin - pin controlling LCD reset (-1 if not used)
- * @param cesPin - chip enable pin to LCD slave (-1 if not used)
- * @param dcPin - data/command pin to control LCD dc (required)
- */
-void         st7735_128x160_spi_init(int8_t rstPin, int8_t cesPin, int8_t dcPin);
 
 /**
  * @}
@@ -109,14 +87,6 @@ void         st7735_128x160_spi_init(int8_t rstPin, int8_t cesPin, int8_t dcPin)
  */
 void         il9163_setRotation(uint8_t rotation);
 
-/**
- * @brief Sets screen orientation (rotation)
- *
- * Sets screen orientation (rotation): 0 - normal, 1 - 90 CW, 2 - 180 CW, 3 - 270 CW
- * @param rotation - screen rotation 0 - normal, 1 - 90 CW, 2 - 180 CW, 3 - 270 CW
- * @note works only with ST7735 display
- */
-#define st7735_setRotation il9163_setRotation
 
 #ifdef __cplusplus
 }
