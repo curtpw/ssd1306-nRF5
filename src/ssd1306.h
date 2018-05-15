@@ -231,6 +231,15 @@ uint8_t     ssd1306_printFixed2x(uint8_t xpos, uint8_t y, const char ch[], EFont
 uint8_t     ssd1306_printFixedN(uint8_t xpos, uint8_t y, const char ch[], EFontStyle style, uint8_t factor);
 
 /**
+ * @brief Prints single character to display at current cursor position
+ *
+ * Prints single character to display at current cursor position
+ * @param ch - character to print to the display. 'LF' and 'CR' are skipped
+ * @return returns number of printed characters.
+ */
+size_t      ssd1306_write(uint8_t ch);
+
+/**
  * Prints text to screen using font 6x8.
  * @param x - horizontal position in pixels
  * @param y - vertical position in blocks (pixels/8)
